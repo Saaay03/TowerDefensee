@@ -8,7 +8,7 @@ public class InstantiatePoolObj : MonoBehaviour
     private GameObject _prefab;
     [SerializeField]
     private Transform _parent;
-    private List<GameObject> _pools = new List<GameObject>();
+    private List<GameObject> _pool = new List<GameObject>();
     public void InstantiateObject(Transform target)
     {
         GameObject obj = GetPooledObject();
@@ -41,13 +41,23 @@ public class InstantiatePoolObj : MonoBehaviour
     private GameObject GetPooledObject()
     {
         GameObject obj = null;
-        obj = _pools.Find(x => !x.activeInHierarchy);
+        obj = _pool.Find(x => !x.activeInHierarchy);
         if (obj == null)
         {
             obj = Instantiate(_prefab);
-            _pools.Add(obj);
+            _pool.Add(obj);
             obj.SetActive(false);
         }
         return obj;
+    }
+    public void DesactivateAllObjects()
+    {
+        foreach (GameObject obj in _pool)
+        {
+            if (obj != null && obj.activeInHierarchy)
+            {
+                obj.SetActive(false);
+            }
+        }
     }
 }
